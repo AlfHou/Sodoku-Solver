@@ -29,7 +29,6 @@ def createBoardList(puzzle):
 
 #Function that returns all the numbers not in the given squares row
 def notInRow(x, y, boardList):
-    #square = boardList[y][x]
     numbersInRow = set([])
     numbersNotInRow = set([])
     for lists in boardList:
@@ -65,35 +64,35 @@ def notInCubicle(x, y, boardList):
                     cubicle.append(boardList[3*r + i][3*c + j])
             cubicleList.append(cubicle)
 
-    if x <= 3 and y <= 3:
+    if x <= 2 and y <= 2:
         x = 0
         y = 0
 
-    elif 3 < x <= 5 and y <= 3:
+    elif 2 < x <= 5 and y <= 2:
         x = 1
         y = 0
 
-    elif x > 5 and y <= 3:
+    elif x > 5 and y <= 2:
         x = 2
         y = 0
 
-    elif x <= 3 and 3 < y <= 5:
+    elif x <= 2 and 2 < y <= 5:
         x = 3
         y = 0
 
-    elif 3 < x <= 5 and 3 < y <= 5:
+    elif 2 < x <= 5 and 2 < y <= 5:
         x = 4
         y = 0
 
-    elif x > 5 and 3 < y <= 5:
+    elif x > 5 and 2 < y <= 5:
         x = 5
         y = 0
 
-    elif x <= 3 and y > 5:
+    elif x <= 2 and y > 5:
         x = 6
         y = 0
 
-    elif 3 < x <= 5 and y > 5:
+    elif 2 < x <= 5 and y > 5:
         x = 7
         y = 0
 
@@ -108,28 +107,30 @@ def notInCubicle(x, y, boardList):
             numbersNotInCubicle.add(number)
     return numbersNotInCubicle
 
-
-def main():
-    boardList = createBoardList("puzzle.txt")
-    print(boardList)
-
+def runThroughBoard(boardList):
     for y in range(9):
         for x in range(9):
             if boardList[y][x] == 0:
                 row = notInRow(x, y, boardList)
                 column = notInColumn(x, y, boardList)
                 cubicle = notInCubicle(x, y, boardList)
-                answer = []
-                for number in row:
-                    if number in column and number in cubicle:
-                        answer.append(number)
+                answer = set([])
+                answer = row & column & cubicle
                 if len(answer) == 1:
-                    boardList[y][x] = answer[0]
-            else:
-                pass
+                    answerNumber = answer.pop()
+                    boardList[y][x] = answerNumber
+
+def main():
+    boardList = createBoardList("puzzle.txt")
+    for lists in boardList:
+        print(lists)
+
+        runThroughBoard(boardList)
+
 
     print("\n")
-    print(boardList)
+    for lists in boardList:
+        print(lists)
 
 
 main()
